@@ -1,0 +1,147 @@
+{
+  "entities": {
+    "Room": {
+      "title": "Room",
+      "description": "Game room configuration, state, and match progression",
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "maxLength": 10,
+          "description": "5-letter room join code"
+        },
+        "hostId": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "UID or identifier of current room host"
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["race", "timed"],
+          "description": "Game mode: race or timed"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["lobby", "playing", "round_over", "match_over"],
+          "description": "Current room state"
+        },
+        "round": {
+          "type": "number",
+          "description": "Current round number"
+        },
+        "maxRounds": {
+          "type": "number",
+          "description": "Target rounds to win match in race mode"
+        },
+        "winnerId": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Winner UID"
+        },
+        "winnerName": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "Winner display name"
+        },
+        "startTime": {
+          "type": "number",
+          "description": "Timestamp when round started"
+        },
+        "endTime": {
+          "type": "number",
+          "description": "Timestamp when round or match ends"
+        },
+        "createdAt": {
+          "type": "number",
+          "description": "Creation timestamp"
+        },
+        "updatedAt": {
+          "type": "number",
+          "description": "Last updated timestamp"
+        }
+      },
+      "required": [
+        "code",
+        "hostId",
+        "mode",
+        "status",
+        "round"
+      ]
+    },
+    "Player": {
+      "title": "Player",
+      "description": "Player or bot participating in the room",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Player UID"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 32,
+          "description": "Display name"
+        },
+        "avatar": {
+          "type": "string",
+          "maxLength": 32,
+          "description": "Avatar id or emoji"
+        },
+        "isBot": {
+          "type": "boolean",
+          "description": "True if bot"
+        },
+        "botDifficulty": {
+          "type": "string",
+          "enum": ["easy", "medium", "hard", "none"],
+          "description": "Difficulty if bot"
+        },
+        "score": {
+          "type": "number",
+          "description": "Accumulated score"
+        },
+        "clearedCount": {
+          "type": "number",
+          "description": "Total cells cleared (0-64)"
+        },
+        "roundsWon": {
+          "type": "number",
+          "description": "Number of rounds won"
+        },
+        "isHost": {
+          "type": "boolean",
+          "description": "Whether player is host"
+        },
+        "active": {
+          "type": "boolean",
+          "description": "Whether player is connected"
+        },
+        "lastActive": {
+          "type": "number",
+          "description": "Last heartbeat timestamp"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "avatar",
+        "isBot",
+        "score",
+        "clearedCount",
+        "roundsWon",
+        "isHost"
+      ]
+    }
+  },
+  "firestore": {
+    "/rooms/{roomId}": {
+      "schema": "Room",
+      "description": "Room metadata and live match state"
+    },
+    "/rooms/{roomId}/players/{playerId}": {
+      "schema": "Player",
+      "description": "Player state in room"
+    }
+  }
+}

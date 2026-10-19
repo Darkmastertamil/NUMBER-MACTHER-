@@ -1,0 +1,23 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny for unspecified collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Health check collection for connection testing
+    match /test/{docId} {
+      allow read, write: if true;
+    }
+
+    // Party rooms and players collection
+    match /rooms/{roomId} {
+      allow read, write: if true;
+
+      match /players/{playerId} {
+        allow read, write: if true;
+      }
+    }
+  }
+}
